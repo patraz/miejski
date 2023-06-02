@@ -56,6 +56,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "miejski.urls"
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+]
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
