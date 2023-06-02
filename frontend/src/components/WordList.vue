@@ -1,6 +1,6 @@
 <template>
     <div class="sm:w-1/3 text-center sm:pr-8 sm:py-8">
-        <h1 class="tracking-widest text-white text-3xl mb-3 font-bold title-font">NOWE SŁOWA</h1>
+        <h1 class="tracking-widest text-white text-2xl mb-3 font-bold title-font">OSTATNIE 10 SŁÓW</h1>
         <ul class="max-w-full space-y-1 text-white font-bold list-inside"  
                                 >
             <li class="flex items-center"
@@ -34,7 +34,7 @@
           console.log('mounted')
   
           await axios
-              .get('/api/v1/definitions/')
+              .get('/api/v1/definitions/last-definitions/')
               .then(response => {
                   console.log(response.data)
                   this.words = response.data

@@ -6,9 +6,31 @@ from rest_framework.generics import (
     UpdateAPIView,
     DestroyAPIView
 )
+from rest_framework.response import Response
+import random
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 # Create your views here.
 from .serializers import DefinitionSerializer
 from .models import Definition
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def get_random(request):
+    items = list(Definition.objects.all())
+    random_item = random.choice(items)
+    serializer = DefinitionSerializer(random_item)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def get_frontpage_courses(request):
+    definitions = Definition.objects.all().order_by('-id')[0:10]
+    serializer = DefinitionSerializer(definitions, many=True)
+    return Response(serializer.data)
 
 
 class DefinitionListView(ListAPIView):
