@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import (
     ListAPIView,
@@ -12,7 +13,14 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 # Create your views here.
 from .serializers import DefinitionSerializer
 from .models import Definition
+from .scrape import scrape_words
 
+def add_scraped_words(request):
+    word_list = scrape_words(times = 3)
+
+    for word in word_list:
+        Definition.objects.create(word=word['word'], example=word['example'], meaning=word['meaning'])
+    return HttpResponse("Here's the text of the web page.")
 
 @api_view(['GET'])
 @authentication_classes([])
