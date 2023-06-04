@@ -15,8 +15,10 @@ from .serializers import DefinitionSerializer
 from .models import Definition
 from .scrape import scrape_words
 
+
+
 def add_scraped_words(request):
-    word_list = scrape_words(times = 3)
+    word_list = scrape_words(1)
 
     for word in word_list:
         Definition.objects.create(word=word['word'], example=word['example'], meaning=word['meaning'])

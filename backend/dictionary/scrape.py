@@ -1,6 +1,9 @@
 
 from requests_html import HTMLSession
+import openai
+import ast
 
+openai.api_key = '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'
 
 # fuction that outputs list of dictionaries with word, meanin and example
 
@@ -14,10 +17,33 @@ def scrape_words(times):
         meaning = r.html.find('article')[0].find('p')[0].text
         example = r.html.find('article')[0].find('blockquote')[0].text
 
-        dict = {
-            'word': word,
-            'meaning' : meaning,
-            'example' : example
-        }
-        list.append(dict)
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Jesteś ekspertem od slangu i języka ulicznego. Przeredaguj ten tekst bez zmieniania slangowego słowa używając synonimów aby brzmiał profesjonalnie"},
+                {"role": "user", "content": f"""
+                meaning: {meaning}
+                example: {example}
+                Only provide a  Python list compliant response  following this format without deviation. Odpowiedz po polsku. 
+                {{
+                "meaning":meaning,"example":example,
+                }}"""}],
+            temperature=0,
+            max_tokens=3877,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        print(response['choices'][0]['message']['content'])
+        # dict = {
+        #     'word': word,
+        #     'meaning' : meaning,
+        #     'example' : example
+        # }
+        
+        dict = response['choices'][0]['message']['content']
+        res = ast.literal_eval(dict)
+        res['word'] = word
+        print(res, type(res))
+        list.append(res)
     return(list)
