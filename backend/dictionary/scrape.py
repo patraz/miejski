@@ -3,7 +3,7 @@ from requests_html import HTMLSession
 import openai
 import ast
 
-openai.api_key = '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'
+
 
 # fuction that outputs list of dictionaries with word, meanin and example
 
