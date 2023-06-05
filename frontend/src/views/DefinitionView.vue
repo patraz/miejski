@@ -5,7 +5,7 @@
   
           <div class="flex flex-col sm:flex-row mt-10">
             <WordList/>
-            <Definition :msg='slug'/>
+            <Definition/>
             
             
           </div>
