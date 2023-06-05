@@ -1,0 +1,3 @@
+- zrobić strone ze wszystkimi słowami gdzie można filter by letter in alphabet
+- zrobić nowy klucz do openai i stworzyć cron job z celery na ten scraping_site
+- ogarnąć wrzucenie tego na caprover

@@ -2,9 +2,9 @@
 from requests_html import HTMLSession
 import openai
 import ast
+from django.conf import settings
 
-
-
+openai.api_key = settings.OPENAI_API
 # fuction that outputs list of dictionaries with word, meanin and example
 
 def scrape_words(times):
