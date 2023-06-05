@@ -6,7 +6,6 @@ from django.utils.text import slugify
 class Definition(models.Model):
     word = models.CharField(max_length=300)
     meaning = models.TextField()
-    example = models.TextField()
     slug = models.SlugField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
 

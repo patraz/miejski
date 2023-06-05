@@ -23,10 +23,9 @@ def scrape_words(times):
                 {"role": "system", "content": "Jesteś ekspertem od slangu i języka ulicznego. Przeredaguj ten tekst bez zmieniania slangowego słowa używając synonimów aby brzmiał profesjonalnie"},
                 {"role": "user", "content": f"""
                 meaning: {meaning}
-                example: {example}
-                Only provide a  Python list compliant response  following this format without deviation. Odpowiedz po polsku. 
+                Only provide a  Python list compliant response  following this format without deviation.
                 {{
-                "meaning":meaning,"example":example,
+                "meaning":meaning,
                 }}"""}],
             temperature=0,
             max_tokens=3877,

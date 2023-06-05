@@ -21,7 +21,7 @@ def add_scraped_words(request):
     word_list = scrape_words(1)
 
     for word in word_list:
-        Definition.objects.create(word=word['word'], example=word['example'], meaning=word['meaning'])
+        Definition.objects.create(word=word['word'], meaning=word['meaning'])
     return HttpResponse("Here's the text of the web page.")
 
 @api_view(['GET'])
