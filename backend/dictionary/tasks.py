@@ -1,4 +1,4 @@
-from celery import task
+from celery import shared_task
 from requests_html import HTMLSession
 import openai
 import ast
@@ -8,11 +8,12 @@ from .models import Definition
 openai.api_key = settings.OPENAI_API
 # fuction that outputs list of dictionaries with word, meanin and example
 
-@task
+@shared_task
 def scrape_words():
     session = HTMLSession()
     scraping_site = 'https://www.miejski.pl/losuj'
     list = []
+    print('działam')
     for x in range(5):
         r = session.get(scraping_site)
         try:
