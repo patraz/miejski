@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import environ
 from pathlib import Path
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,7 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'corsheaders',
-    'dictionary'
+    'django_celery_beat',
+    'dictionary',
+
 ]
 
 MIDDLEWARE = [
@@ -136,3 +140,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ## OPENAI
 
 OPENAI_API = env('OPENAI_API')
+
+## CELERY
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_BEAT_SCHEDULE = {
+    'scrape_definitions':{
+        'task': 'dictionary.tasks.scrape_words',
+        'schedule': crontab(hour='*/3')
+    }
+}
