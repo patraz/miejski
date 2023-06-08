@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
     name: 'Nav',
@@ -95,8 +95,8 @@ export default {
         }
     },
     methods: {
-        random() {
-            axios
+        async random() {
+            await axios
                 .get(`/api/v1/definitions/random/`)
                 .then(response => {
                     response.data.slug
@@ -104,23 +104,16 @@ export default {
                 })
 
         },
-        searchForm() {
-            console.log(this.search)
-            axios
-                .get(`/api/v1/definitions/search/`, {
-                    params: {
-                        q: this.search
-                    }
-                })
-                .then(response => {
-                // Handle the response data
-                console.log(response.data);
-
-                })
-                .catch(error => {
-                    // Handle any errors
-                    console.error(error);
-                });
+        async searchForm() {
+            
+            if (!this.search) {
+                this.$router.push({ name: 'Search', params: { q: ' ' } });
+            }
+            else{
+                this.$router.push({ name: 'Search', params: { q: this.search } });
+            }
+            
+            
     }
 }}
 </script>

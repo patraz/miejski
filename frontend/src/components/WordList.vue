@@ -31,8 +31,6 @@
     },
     name: 'WordList',
     async mounted() {
-          console.log('mounted')
-  
           await axios
               .get('/api/v1/definitions/last-definitions/')
               .then(response => {

@@ -10,4 +10,4 @@ class DefinitionSerializer(serializers.ModelSerializer):
 class SearchDefinitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Definition
-        fields = ('word', 'slug')
+        fields = ('word', 'slug', 'meaning')
