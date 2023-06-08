@@ -11,10 +11,11 @@ from rest_framework.response import Response
 import random
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 # Create your views here.
-from .serializers import DefinitionSerializer
+from .serializers import DefinitionSerializer, SearchDefinitionSerializer
 from .models import Definition
 from .scrape import scrape_words
 
+from django.db.models import Q
 
 
 def add_scraped_words(request):
@@ -23,6 +24,17 @@ def add_scraped_words(request):
     for word in word_list:
         Definition.objects.create(word=word['word'], meaning=word['meaning'])
     return HttpResponse("Here's the text of the web page.")
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def search_words(request):
+    search_query = request.GET.get('q','')
+    queryset = Definition.objects.filter(Q(word__icontains=search_query))
+    serializer = SearchDefinitionSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
 
 @api_view(['GET'])
 @authentication_classes([])

@@ -107,8 +107,20 @@ export default {
         searchForm() {
             console.log(this.search)
             axios
-                .post(`/api/v1/definitions/search/${this.search}/`)
-        }
+                .get(`/api/v1/definitions/search/`, {
+                    params: {
+                        q: this.search
+                    }
+                })
+                .then(response => {
+                // Handle the response data
+                console.log(response.data);
+
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error(error);
+                });
     }
-}
+}}
 </script>
