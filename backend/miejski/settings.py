@@ -31,8 +31,8 @@ SECRET_KEY = "django-insecure-=(d9f0=8pqvsdq9uks7us%pg*fm%*8i0!2&4d98&wq%!b++gbw
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
+CSRF_TRUSTED_ORIGINS = ['https://sciek-django.captain.patraz.online','https://*.127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', env('ALLOWED_HOSTS')]
 
 
 # Application definition
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
 ROOT_URLCONF = "miejski.urls"
@@ -93,7 +95,7 @@ WSGI_APPLICATION = "miejski.wsgi.application"
 
 
 
-if TEST:
+if DEBUG:
     DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -146,7 +148,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / 'static'
 
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -160,8 +169,8 @@ OPENAI_API = env('OPENAI_API')
 
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 CELERY_BEAT_SCHEDULE = {
-    'scrape_definitions':{
+    'scrape_definitions': {
         'task': 'dictionary.tasks.scrape_words',
-        'schedule': crontab(hour='*/3')
+        'schedule': crontab(minute='0', hour='*/3'),
     }
 }
