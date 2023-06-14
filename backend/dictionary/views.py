@@ -1,4 +1,7 @@
+from typing import Any
 from django.http import HttpResponse
+from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import (
     ListAPIView,
@@ -7,16 +10,44 @@ from rest_framework.generics import (
     UpdateAPIView,
     DestroyAPIView
 )
+
 from rest_framework.response import Response
-import random
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-# Create your views here.
+
+
 from .serializers import DefinitionSerializer, SearchDefinitionSerializer
 from .models import Definition
 from .scrape import scrape_words
 
+import random
+
 from django.db.models import Q
 
+
+class PostPagination(PageNumberPagination):
+    page_size = 5
+
+    def get_paginated_response(self, data):
+        return Response(
+            {
+                "count": self.page.paginator.count,
+                "next": self.get_next_link(),
+                "previous": self.get_previous_link(),
+                "current": self.page.number,
+                "results": data
+            }
+        )
+class DefinitionListViewByLetter(ListAPIView):
+    pagination_class = PostPagination
+    permission_classes = (AllowAny, )
+    serializer_class = DefinitionSerializer
+
+    def get_queryset(self):
+        letter = self.kwargs.get('letter')
+        if letter:
+            queryset = Definition.objects.filter(Q(word__istartswith=letter) | Q(word__istartswith=letter.upper())).order_by('word')
+        
+        return queryset
 
 def add_scraped_words(request):
     word_list = scrape_words(1)
